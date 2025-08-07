@@ -72,8 +72,20 @@ class Location extends Fluent
         $addresses = \collect($collection->all());
 
         $geocoded = $addresses->filter(static function ($geocode) {
-            return ! \is_null($geocode->getSubLocality()) || ! \is_null($geocode->getStreetNumber());
+            return ! \is_null($geocode->getStreetNumber());
         })->first();
+
+        if (\is_null($geocoded)) {
+            $geocoded = $addresses->filter(static function ($geocode) {
+                return ! \is_null($geocode->getStreetName());
+            })->first();
+        }
+
+        if (\is_null($geocoded)) {
+            $geocoded = $addresses->filter(static function ($geocode) {
+                return ! \is_null($geocode->getSubLocality());
+            })->first();
+        }
 
         if (\is_null($geocoded)) {
             $geocoded = $addresses->first();
