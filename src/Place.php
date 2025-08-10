@@ -2,7 +2,7 @@
 
 namespace Katsana\Geocoder;
 
-use Orchestra\Support\Fluent;
+use Illuminate\Support\Fluent;
 
 class Place extends Fluent
 {

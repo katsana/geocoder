@@ -3,7 +3,7 @@
 namespace Katsana\Geocoder;
 
 use Geocoder\Model\AddressCollection;
-use Orchestra\Support\Fluent;
+use Illuminate\Support\Fluent;
 
 class Location extends Fluent
 {
@@ -54,7 +54,7 @@ class Location extends Fluent
         }
 
         return \tap(new static($attributes), static function ($self) use ($searchCoordinate) {
-            $self['coordinate'] = $searchCoordinate;
+            $self->coordinate = $searchCoordinate;
         });
     }
 

@@ -53,14 +53,24 @@ abstract class Geocode
     public function resolve(Geocoder $geocoder, Repository $cache): ?Location
     {
         if (! \is_null($proximityLocation = $cache->get($this->getProximityCacheKey()))) {
-            return Location::parse($this->getCoordinate(), $proximityLocation);
-        }
-
-        if (! \is_null($location = $this->queryFromLocalProvider($geocoder, $cache))) {
+            $location = Location::parse($this->getCoordinate(), $proximityLocation);
+            $location->source = 'cache';
             return $location;
         }
 
-        return $this->queryFromProvider($geocoder, $cache);
+        if (! \is_null($location = $this->queryFromLocalProvider($geocoder, $cache))) {
+            $location->source = 'db';
+            return $location;
+        }
+
+        $location = $this->queryFromProvider($geocoder, $cache);
+        if (! \is_null($location)) {
+            $location->source = 'provider';
+        }
+
+        \info($location->toArray());
+        
+        return $location;
     }
 
     /**

@@ -5,11 +5,9 @@ namespace Katsana\Geocoder;
 use Geocoder\Geocoder;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
-use Orchestra\Support\Providers\Concerns\AliasesProvider;
 
 class GeocoderServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    use AliasesProvider;
 
     /**
      * Class aliases.
@@ -26,7 +24,6 @@ class GeocoderServiceProvider extends ServiceProvider implements DeferrableProvi
     public function register()
     {
         $this->registerGeocoder();
-        $this->registerCoreContainerAliases();
     }
 
     /**
@@ -36,6 +33,11 @@ class GeocoderServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         $this->app->singleton('katsana.geocoder', static function ($app) {
             return new Manager($app);
+        });
+
+        // Allow resolving by class name as well
+        $this->app->singleton(Manager::class, function ($app) {
+            return $app->make('katsana.geocoder');
         });
     }
 
