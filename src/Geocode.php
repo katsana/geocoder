@@ -68,7 +68,7 @@ abstract class Geocode
             $location->source = 'provider';
         }
 
-        \info($location->toArray());
+        // \info($location->toArray()); //caused error on test
         
         return $location;
     }
