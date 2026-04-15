@@ -15,5 +15,6 @@ class Place extends Fluent
         'areas' => [],
         'locations' => [],
         'address' => null,
+        'route' => [],
     ];
 }
